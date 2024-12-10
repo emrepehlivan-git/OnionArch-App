@@ -1,0 +1,63 @@
+﻿version: "3.8"
+
+services:
+  ecommerce.webapi:
+    container_name: c_ecommerce_webapi
+    build:
+      context: .
+      dockerfile: src/Presentation/ECommerce.WebAPI/Dockerfile
+    ports:
+      - "4000:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=ecommerce.db;Database=ecommerce;Username=postgres;Password=postgres
+    depends_on:
+      - ecommerce.db
+      - ecommerce.seq
+    networks:
+      - ecommerce
+
+  ecommerce.db:
+    image: postgres
+    container_name: c_ecommerce_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecommerce
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - ecommerce
+
+  ecommerce.seq:
+    image: datalust/seq
+    container_name: c_ecommerce_seq
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - ecommerce
+
+  ecommerce.redis:
+    image: redis
+    container_name: c_ecommerce_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce
+
+  ecommerce.smtp4dev:
+    image: smtp4dev/smtp4dev
+    container_name: c_ecommerce_smtp4dev
+    ports:
+      - "25:25"
+    networks:
+      - ecommerce
+
+networks:
+  ecommerce:
+
+volumes:
+  db:

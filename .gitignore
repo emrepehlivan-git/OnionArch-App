@@ -1,0 +1,82 @@
+# Build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.user
+*.suo
+*.swp
+*.ilk
+*.idb
+*.DS_Store
+
+# ASP.NET specific files
+_AppStart
+_AppRestart
+*.publishsettings
+appsettings*.json
+appsettings*.Development.json
+
+# Visual Studio Code settings
+.vscode/
+.vscode/*
+
+# Visual Studio specific files
+.vs/
+*.ncrunch*
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.VC.db
+.vsconfig
+
+# Rider specific files
+.idea/
+.idea/*
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+
+# Entity Framework
+*.edmx.sql
+*.classdiagram
+Migrations/
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tlog
+*.tmp
+*.temp
+*.bak
+
+# ReSharper files
+_ReSharper*/
+*.DotSettings.user
+
+# Azure Web App specific
+.scm/
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+*.coverlet.json
+coverage.opencover.xml
+
+# JetBrains Rider
+.idea/
