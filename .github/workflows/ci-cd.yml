@@ -22,13 +22,13 @@ jobs:
           dotnet-version: 8.0
 
       - name: Restore dependencies
-        run: dotnet restore src/Presentation/ECommerce.WebAPI/ECommerce.WebAPI.csproj
+        run: dotnet restore ECommerce.sln
 
       - name: Build solution
-        run: dotnet build src/Presentation/ECommerce.WebAPI/ECommerce.WebAPI.csproj --configuration Release --no-restore
+        run: dotnet build ECommerce.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test ECommerce.sln --configuration Release --no-restore --verbosity normal
 
   docker:
     name: Build and Push Docker Image
