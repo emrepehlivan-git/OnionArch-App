@@ -1,6 +1,6 @@
 using System.Net.Mail;
 using ECommerce.Application.Dtos.Email;
-using ECommerce.Application.Services;
+using ECommerce.Application.Interfaces.Services;
 using ECommerce.Application.Settings;
 using Microsoft.Extensions.Options;
 

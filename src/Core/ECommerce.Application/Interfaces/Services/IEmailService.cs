@@ -1,6 +1,6 @@
 using ECommerce.Application.Dtos.Email;
 
-namespace ECommerce.Application.Services;
+namespace ECommerce.Application.Interfaces.Services;
 
 public interface IEmailService
 {

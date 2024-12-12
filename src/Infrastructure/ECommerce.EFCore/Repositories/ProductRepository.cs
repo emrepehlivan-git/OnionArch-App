@@ -1,4 +1,4 @@
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Domain.Entities;
 using ECommerce.EFCore.Contexts;
 

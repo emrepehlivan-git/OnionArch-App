@@ -19,4 +19,10 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features/OrderItems/" />
+      <Folder Include="Features/Orders/" />
+      <Folder Include="Interfaces\" />
+    </ItemGroup>
+
 </Project>

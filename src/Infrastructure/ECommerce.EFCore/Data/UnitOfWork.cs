@@ -1,4 +1,4 @@
-using ECommerce.Application.Data;
+using ECommerce.Application.Interfaces.Data;
 using ECommerce.EFCore.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 

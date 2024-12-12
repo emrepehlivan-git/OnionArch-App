@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using ECommerce.Application.Wrappers;
 using ECommerce.Domain.Interfaces;
 
-namespace ECommerce.Application.Repositories;
+namespace ECommerce.Application.Interfaces.Repositories;
 
 public interface IRepository<TEntity> where TEntity : IEntity
 {

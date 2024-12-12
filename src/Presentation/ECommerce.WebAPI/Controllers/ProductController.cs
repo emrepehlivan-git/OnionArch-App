@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebAPI.Controllers;
 
-public sealed class ProductController : BaseController
+public sealed class ProductController : BaseApiController
 {
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)

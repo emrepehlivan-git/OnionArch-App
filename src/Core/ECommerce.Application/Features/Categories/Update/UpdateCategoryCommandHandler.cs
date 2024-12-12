@@ -1,4 +1,4 @@
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using MediatR;
 
@@ -11,7 +11,7 @@ public sealed class UpdateCategoryCommandHandler(
     public async Task<Result<Guid>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await categoryRepository.GetByIdAsync(request.Id, cancellationToken);
-        category.Update(request.Name);
+        category!.Update(request.Name);
         var updatedCategory = categoryRepository.Update(category);
 
         if (updatedCategory is null)

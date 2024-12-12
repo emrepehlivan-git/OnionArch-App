@@ -1,4 +1,4 @@
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using FluentValidation;
 
 namespace ECommerce.Application.Features.Products.Delete;

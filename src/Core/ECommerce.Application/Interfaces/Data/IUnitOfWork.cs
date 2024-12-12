@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ECommerce.Application.Data;
+namespace ECommerce.Application.Interfaces.Data;
 
 public interface IUnitOfWork
 {

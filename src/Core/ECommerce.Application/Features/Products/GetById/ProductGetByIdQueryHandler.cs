@@ -1,5 +1,5 @@
 using ECommerce.Application.Features.Products.Dtos;
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using Mapster;
 using MediatR;

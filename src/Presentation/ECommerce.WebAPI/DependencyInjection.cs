@@ -1,4 +1,5 @@
 using ECommerce.Application;
+using ECommerce.Application.Settings;
 using ECommerce.EFCore;
 using ECommerce.EFCore.Contexts;
 using ECommerce.Infrastructure;
@@ -15,9 +16,10 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddApplicationServices(configuration)
+        services.AddApplicationServices()
             .AddInfrastructureServices()
             .AddEFCoreServices(configuration)
+            .ConfigureSettings(configuration)
             .AddSerilog(new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger());
 
         return services;
@@ -46,5 +48,11 @@ public static class DependencyInjection
         var dbContext = scope.ServiceProvider.GetRequiredService<ECommerceDbContext>();
         if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
             await dbContext.Database.MigrateAsync();
+    }
+
+    private static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<MailSettings>(configuration.GetSection(MailSettings.SectionName));
+        return services;
     }
 }

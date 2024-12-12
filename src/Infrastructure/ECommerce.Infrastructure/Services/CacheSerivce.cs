@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using ECommerce.Application.Services;
+using ECommerce.Application.Interfaces.Services;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace ECommerce.Infrastructure.Services;

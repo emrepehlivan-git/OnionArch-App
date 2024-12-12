@@ -12,7 +12,7 @@ namespace ECommerce.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(config =>
@@ -22,13 +22,6 @@ public static class DependencyInjection
             config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheBehavior<,>));
         });
-        services.ConfigureSettings(configuration);
-        return services;
-    }
-
-    private static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MailSettings>(x => configuration.GetSection(MailSettings.SectionName).Bind(x));
         return services;
     }
 }

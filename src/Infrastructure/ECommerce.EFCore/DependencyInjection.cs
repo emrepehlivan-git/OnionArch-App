@@ -1,5 +1,5 @@
-using ECommerce.Application.Data;
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Data;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.EFCore.Contexts;
 using ECommerce.EFCore.Data;
 using ECommerce.EFCore.Repositories;
@@ -26,6 +26,8 @@ public static class DependencyInjection
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
         return services;
     }
 }

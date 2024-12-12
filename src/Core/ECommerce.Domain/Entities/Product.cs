@@ -2,20 +2,14 @@ namespace ECommerce.Domain.Entities;
 
 public class Product : BaseEntity
 {
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string Name { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
 
     public decimal Price { get; private set; }
     public Guid CategoryId { get; private set; }
     public virtual Category Category { get; private set; }
 
-    private Product()
-    {
-        Name = string.Empty;
-        Description = string.Empty;
-        Price = 0;
-        CategoryId = Guid.Empty;
-    }
+    private Product() { }
 
     private Product(string name, string description, decimal price, Guid categoryId)
     {

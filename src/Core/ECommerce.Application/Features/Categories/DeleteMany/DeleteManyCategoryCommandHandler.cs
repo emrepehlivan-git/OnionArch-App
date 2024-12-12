@@ -1,4 +1,4 @@
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

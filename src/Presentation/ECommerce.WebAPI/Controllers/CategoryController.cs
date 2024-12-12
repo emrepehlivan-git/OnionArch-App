@@ -10,7 +10,7 @@ using ECommerce.Application.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebAPI.Controllers;
-public sealed class CategoryController : BaseController
+public sealed class CategoryController : BaseApiController
 {
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationParams request, CancellationToken cancellationToken)

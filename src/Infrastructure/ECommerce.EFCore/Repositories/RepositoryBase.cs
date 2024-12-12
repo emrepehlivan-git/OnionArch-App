@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using ECommerce.Application.Extenions;
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using ECommerce.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +28,7 @@ where TEntity : class, IEntity
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await Table.FindAsync(new object[] { id }, cancellationToken);
+        return await Table.FindAsync([id], cancellationToken);
     }
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
@@ -82,7 +82,7 @@ where TEntity : class, IEntity
         bool trackChanges = false,
         CancellationToken cancellationToken = default)
     {
-        var query = GetByCondition(expression, includes, trackChanges);
+        var query = GetByCondition(expression ?? (x => true), includes, trackChanges);
         return await query.ToPaginatedResultAsync(paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }
 }

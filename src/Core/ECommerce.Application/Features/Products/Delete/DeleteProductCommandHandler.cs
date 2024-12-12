@@ -1,4 +1,4 @@
-using ECommerce.Application.Repositories;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using MediatR;
 
@@ -10,7 +10,7 @@ public sealed class DeleteProductCommandHandler(IProductRepository productReposi
     {
         var product = await productRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        await productRepository.DeleteAsync(product.Id, cancellationToken);
+        await productRepository.DeleteAsync(product!.Id, cancellationToken);
 
         return Result<Guid>.Success(product.Id);
     }
