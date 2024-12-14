@@ -15,6 +15,7 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, EmailService>();
         services.AddSingleton<ICacheService, CacheSerivce>();
+        services.AddScoped<IPaymentService, PaymentService>();
         return services;
     }
 }

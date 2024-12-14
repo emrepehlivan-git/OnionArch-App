@@ -61,6 +61,8 @@ public class Result
     /// <param name="validationErrors">The validation errors.</param>
     /// <returns>An invalid result.</returns>
     public static Result Invalid(IEnumerable<Error> validationErrors) => new(false, Error.None, validationErrors);
+
+    public static implicit operator Result(Error error) => Failure(error);
 }
 
 /// <summary>
@@ -74,7 +76,7 @@ public class Result<T> : Result
     /// <summary>
     /// Gets the value returned by the operation if it was successful.
     /// </summary>
-    public T? Value => _value;
+    public T? Value => IsSuccess ? _value : default;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> class.
@@ -120,11 +122,10 @@ public class Result<T> : Result
     /// <param name="validationErrors">The validation errors.</param>
     /// <returns>An invalid result.</returns>
     public static new Result<T> Invalid(IEnumerable<Error> validationErrors)
-        => new(default!, false, "Validation Error", validationErrors);
+        => new(default!, false, Error.None, validationErrors);
 
-    /// <summary>
-    /// Implicitly converts a value to a successful <see cref="Result{T}"/>.
-    /// </summary>
-    /// <param name="value">The value to convert.</param>
     public static implicit operator Result<T>(T value) => Success(value);
+    public static implicit operator Result<T>(Error error) => Failure(error);
+    // Remove implicit conversion from base Result class since it's not allowed
+    public static Result<T> From(Result result) => new(default!, result.IsSuccess, result.Error, result.ValidationErrors);
 }
