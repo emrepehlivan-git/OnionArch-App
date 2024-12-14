@@ -5,7 +5,7 @@ using MediatR;
 
 namespace ECommerce.Application.Features.Categories.GetAll;
 
-public record class GetAllCategoriesQuery(PaginationParams Request) : IRequest<PaginatedResult<CategoryDto>>, ICacheableRequest
+public record GetAllCategoriesQuery(PaginationParams Request) : IRequest<PaginatedResult<CategoryDto>>, ICacheableRequest
 {
     public string CacheKey => "Categories";
 

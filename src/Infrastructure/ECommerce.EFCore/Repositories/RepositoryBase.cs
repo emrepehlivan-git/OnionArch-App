@@ -87,9 +87,7 @@ where TEntity : class, IEntity
     }
 
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
-    {
-        return await Table.CountAsync(expression, cancellationToken);
-    }
+    => await Table.CountAsync(expression, cancellationToken);
 
     public IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities)
     {
