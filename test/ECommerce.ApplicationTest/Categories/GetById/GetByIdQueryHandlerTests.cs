@@ -7,11 +7,9 @@ namespace ECommerce.ApplicationTest.Categories.GetById;
 public class GetByIdQueryHandlerTests : CategoryTestBase
 {
     private readonly GetByIdQueryHandler _handler;
-    private readonly GetByIdQuery _query;
     public GetByIdQueryHandlerTests()
     {
         _handler = new GetByIdQueryHandler(CategoryRepositoryMock.Object);
-        _query = new GetByIdQuery(DefaultCategory.Id);
     }
 
     [Fact]
@@ -22,7 +20,7 @@ public class GetByIdQueryHandlerTests : CategoryTestBase
             .ReturnsAsync(DefaultCategory);
 
         // Act
-        var result = await _handler.Handle(_query, CancellationToken.None);
+        var result = await _handler.Handle(new GetByIdQuery(DefaultCategory.Id), CancellationToken.None);
 
         // Assert
         result.Value.Should().NotBeNull();
@@ -40,7 +38,7 @@ public class GetByIdQueryHandlerTests : CategoryTestBase
             .ReturnsAsync((Domain.Entities.Category)null!);
 
         // Act
-        var result = await _handler.Handle(_query, CancellationToken.None);
+        var result = await _handler.Handle(new GetByIdQuery(Guid.NewGuid()), CancellationToken.None);
 
         // Assert
         result.Value.Should().BeNull();

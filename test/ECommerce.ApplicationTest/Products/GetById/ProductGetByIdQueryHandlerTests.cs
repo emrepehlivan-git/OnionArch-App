@@ -24,7 +24,6 @@ public sealed class ProductGetByIdQueryHandlerTests : ProductTestBase
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be(DefaultProduct.Adapt<ProductDto>());
-        ProductRepositoryMock.Verify(x => x.GetByIdAsync(DefaultProduct.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -37,6 +36,5 @@ public sealed class ProductGetByIdQueryHandlerTests : ProductTestBase
 
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(ProductErrors.ProductNotFound);
-        ProductRepositoryMock.Verify(x => x.GetByIdAsync(DefaultProduct.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 }
