@@ -4,6 +4,7 @@ namespace ECommerce.Application.Features.Orders;
 
 public static class OrderErrors
 {
+    public static Error OrderNotFound => new("OrderNotFound", "Order not found");
     public static Error OrderCreationFailed => new("OrderCreationFailed", "Order creation failed");
     public static Error OrderItemNotFound(Guid orderItemId) => new("OrderItemNotFound", $"Order item with id {orderItemId} not found");
     public static Error OrderItemAlreadyExists(Guid orderItemId) => new("OrderItemAlreadyExists", $"Order item with id {orderItemId} already exists");

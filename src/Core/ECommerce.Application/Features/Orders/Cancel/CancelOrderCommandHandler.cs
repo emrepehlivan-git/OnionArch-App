@@ -1,0 +1,16 @@
+using ECommerce.Application.Interfaces.Repositories;
+using ECommerce.Application.Wrappers;
+using MediatR;
+
+namespace ECommerce.Application.Features.Orders.Cancel;
+
+public sealed class CancelOrderCommandHandler(IOrderRepository orderRepository) : IRequestHandler<CancelOrderCommand, Result>
+{
+    public async Task<Result> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+    {
+        var order = await orderRepository.GetByIdAsync(request.OrderId, cancellationToken);
+        order!.Cancel();
+        orderRepository.Update(order);
+        return Result.Success();
+    }
+}

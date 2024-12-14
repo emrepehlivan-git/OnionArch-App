@@ -56,4 +56,9 @@ public class Order : BaseEntity
     {
         OrderItems.Remove(item);
     }
+
+    public void Cancel()
+    {
+        Status = OrderStatus.Cancelled;
+    }
 }
