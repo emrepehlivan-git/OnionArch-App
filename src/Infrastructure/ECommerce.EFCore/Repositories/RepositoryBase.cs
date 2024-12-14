@@ -85,4 +85,15 @@ where TEntity : class, IEntity
         var query = GetByCondition(expression ?? (x => true), includes, trackChanges);
         return await query.ToPaginatedResultAsync(paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }
+
+    public async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return await Table.CountAsync(expression, cancellationToken);
+    }
+
+    public IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities)
+    {
+        _context.UpdateRange(entities);
+        return entities;
+    }
 }

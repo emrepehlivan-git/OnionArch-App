@@ -20,8 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features/OrderItems/" />
-      <Folder Include="Features/Orders/" />
       <Folder Include="Interfaces\" />
     </ItemGroup>
 

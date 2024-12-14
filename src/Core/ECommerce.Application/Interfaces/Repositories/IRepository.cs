@@ -21,7 +21,9 @@ public interface IRepository<TEntity> where TEntity : IEntity
    Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
    Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
    TEntity Update(TEntity entity);
+   IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
    bool Delete(TEntity entity);
    IEnumerable<bool> DeleteRange(IEnumerable<TEntity> entities);
    Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+   Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 }
