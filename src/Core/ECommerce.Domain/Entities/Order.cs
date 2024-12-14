@@ -1,4 +1,5 @@
 using ECommerce.Domain.Enums;
+using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Domain.Entities;
 
@@ -6,21 +7,24 @@ public class Order : BaseEntity
 {
     public string OrderNumber { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
+    public Address Address { get; private set; }
     public decimal TotalAmount => OrderItems.Sum(item => item.Price * item.Quantity);
+    public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
     public PaymentStatus PaymentStatus { get; private set; }
-    public PaymentMethod PaymentMethod { get; private set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; private set; } = [];
 
     private Order() { }
 
-    private Order(PaymentMethod paymentMethod)
+    private Order(PaymentMethod paymentMethod, Address address)
     {
         OrderNumber = GenerateOrderNumber();
         OrderDate = DateTime.UtcNow;
         Status = OrderStatus.Pending;
         PaymentStatus = PaymentStatus.Pending;
         PaymentMethod = paymentMethod;
+        Address = address;
     }
 
     private string GenerateOrderNumber()
@@ -35,9 +39,9 @@ public class Order : BaseEntity
         return $"ORD-{timestamp}-{randomPart}";
     }
 
-    public static Order Create(PaymentMethod paymentMethod)
+    public static Order Create(PaymentMethod paymentMethod, Address address)
     {
-        return new Order(paymentMethod);
+        return new Order(paymentMethod, address);
     }
 
     public void AddItems(IEnumerable<OrderItem> items)

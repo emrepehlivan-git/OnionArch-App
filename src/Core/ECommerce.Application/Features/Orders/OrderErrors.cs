@@ -10,5 +10,6 @@ public static class OrderErrors
     public static Error OneOrMoreOrderItemsNotFound(Guid[] productIds) => new("OneOrMoreOrderItemsNotFound", $"One or more order items not found: {string.Join(", ", productIds)}");
     public static Error OneOrMoreOrderItemsNotInStock(Guid[] productIds) => new("OneOrMoreOrderItemsNotInStock", $"One or more order items not in stock: {string.Join(", ", productIds)}");
     public static Error InvalidPaymentMethod => new("InvalidPaymentMethod", "Invalid payment method");
+    public static Error InvalidAddress => new("InvalidAddress", "All fields are required");
 }
 

@@ -2,6 +2,7 @@ using FluentValidation;
 using ECommerce.Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ECommerce.Application.Wrappers;
+using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Application.Features.Orders.Create;
 
@@ -24,6 +25,10 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
         RuleFor(x => x.PaymentMethod)
             .IsInEnum()
             .WithMessage(OrderErrors.InvalidPaymentMethod.Message);
+
+        RuleFor(x => x.Address)
+            .Must(IsValidAddress)
+            .WithMessage(OrderErrors.InvalidAddress.Message);
     }
 
     private async Task<bool> ValidateProducts(CreateOrderCommand command, CancellationToken token)
@@ -42,5 +47,14 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
                 return false;
 
         return true;
+    }
+
+    private static bool IsValidAddress(Address address)
+    {
+        return !string.IsNullOrEmpty(address.Country) &&
+               !string.IsNullOrEmpty(address.Street) &&
+               !string.IsNullOrEmpty(address.City) &&
+               !string.IsNullOrEmpty(address.State) &&
+               !string.IsNullOrEmpty(address.ZipCode);
     }
 }

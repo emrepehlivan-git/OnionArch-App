@@ -18,7 +18,7 @@ public sealed class CreateOrderCommandHandler(
             .GetByCondition(product => request.OrderItems.Select(x => x.ProductId).Contains(product.Id))
             .ToList();
 
-        var order = Order.Create(request.PaymentMethod);
+        var order = Order.Create(request.PaymentMethod, request.Address);
 
         List<OrderItem> orderItems = [];
         request.OrderItems.ForEach(item =>

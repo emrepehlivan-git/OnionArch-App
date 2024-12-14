@@ -22,6 +22,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.PaymentMethod).IsRequired();
 
         builder.HasMany(o => o.OrderItems).WithOne(oi => oi.Order).HasForeignKey(oi => oi.OrderId);
+        builder.OwnsOne(o => o.Address);
 
         builder.HasIndex(o => o.OrderNumber).IsUnique();
     }
