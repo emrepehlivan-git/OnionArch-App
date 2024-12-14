@@ -14,7 +14,7 @@ public class OrderItem : BaseEntity
 
     private OrderItem() { }
 
-    private OrderItem(Guid productId, decimal price, int quantity, Guid orderId)
+    private OrderItem(Guid productId, Guid orderId, decimal price, int quantity)
     {
         ProductId = productId;
         Price = price;
@@ -22,8 +22,8 @@ public class OrderItem : BaseEntity
         OrderId = orderId;
     }
 
-    public static OrderItem Create(Guid productId, decimal price, int quantity, Guid orderId)
+    public static OrderItem Create(Guid productId, Guid orderId, decimal price, int quantity)
     {
-        return new(productId, price, quantity, orderId);
+        return new(productId, orderId, price, quantity);
     }
 }

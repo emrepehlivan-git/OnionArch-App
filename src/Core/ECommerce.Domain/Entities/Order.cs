@@ -14,31 +14,42 @@ public class Order : BaseEntity
 
     private Order() { }
 
-    private Order(string orderNumber,
-        DateTime orderDate,
-        OrderStatus status,
-        PaymentStatus paymentStatus,
-        PaymentMethod paymentMethod)
+    private Order(PaymentMethod paymentMethod)
     {
-        OrderNumber = orderNumber;
-        OrderDate = orderDate;
-        Status = status;
-        PaymentStatus = paymentStatus;
+        OrderNumber = GenerateOrderNumber();
+        OrderDate = DateTime.UtcNow;
+        Status = OrderStatus.Pending;
+        PaymentStatus = PaymentStatus.Pending;
         PaymentMethod = paymentMethod;
     }
 
-    public static Order Create(
-        string orderNumber,
-        DateTime orderDate,
-        OrderStatus status,
-        PaymentStatus paymentStatus,
-        PaymentMethod paymentMethod)
+    private string GenerateOrderNumber()
     {
-        return new(orderNumber, orderDate, status, paymentStatus, paymentMethod);
+        string timestamp = DateTime.UtcNow.Ticks.ToString("X");
+
+        string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        string randomPart = new string(Enumerable.Repeat(allowedChars, 6)
+            .Select(s => s[Random.Shared.Next(s.Length)])
+            .ToArray());
+
+        return $"ORD-{timestamp}-{randomPart}";
     }
 
-    public void AddItem(OrderItem item)
+    public static Order Create(PaymentMethod paymentMethod)
     {
-        OrderItems.Add(item);
+        return new Order(paymentMethod);
+    }
+
+    public void AddItems(IEnumerable<OrderItem> items)
+    {
+        foreach (var item in items)
+        {
+            OrderItems.Add(item);
+        }
+    }
+
+    public void RemoveItem(OrderItem item)
+    {
+        OrderItems.Remove(item);
     }
 }
