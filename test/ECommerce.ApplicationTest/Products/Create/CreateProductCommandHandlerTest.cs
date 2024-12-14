@@ -12,6 +12,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             DefaultProduct.Name,
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
 
@@ -39,6 +40,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             DefaultProduct.Name,
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
 
@@ -60,6 +62,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             string.Empty,
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);
@@ -76,6 +79,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             new string('a', ProductConsts.NameMaxLength + 1),
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);
@@ -92,6 +96,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             string.Empty,
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);
@@ -108,6 +113,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             DefaultProduct.Name,
             new string('a', ProductConsts.DescriptionMaxLength + 1),
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);
@@ -124,6 +130,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             DefaultProduct.Name,
             DefaultProduct.Description,
             -1,
+            DefaultProduct.Stock,
             DefaultCategoryId
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);
@@ -140,6 +147,7 @@ public class CreateProductCommandHandlerTest : ProductTestBase
             DefaultProduct.Name,
             DefaultProduct.Description,
             DefaultProduct.Price,
+            DefaultProduct.Stock,
             Guid.Empty
         );
         var validator = new CreateProductCommandValidator(CategoryRepositoryMock.Object);

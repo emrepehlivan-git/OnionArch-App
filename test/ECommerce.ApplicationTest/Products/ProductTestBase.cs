@@ -20,13 +20,15 @@ public abstract class ProductTestBase
         string name = "Product 1",
         string description = "Description 1",
         decimal price = 100,
-        Guid? categoryId = null)
+        Guid? categoryId = null,
+        int stock = 10)
     {
         DefaultProduct = Domain.Entities.Product.Create(
             name,
             description,
             price,
-            categoryId ?? DefaultCategoryId);
+            categoryId ?? DefaultCategoryId,
+            stock);
     }
 
 }

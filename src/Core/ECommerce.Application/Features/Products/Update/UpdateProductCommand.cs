@@ -10,5 +10,6 @@ public sealed record UpdateProductCommand(
     string Name,
     string Description,
     decimal Price,
-    Guid CategoryId
+    Guid CategoryId,
+    int Stock
 ) : IRequest<Result<Guid>>, IValidetableRequest, ITransactionalRequest;

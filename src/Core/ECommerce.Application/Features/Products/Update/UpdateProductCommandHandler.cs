@@ -15,7 +15,8 @@ public sealed class UpdateProductCommandHandler(
             request.Name,
             request.Description,
             request.Price,
-            request.CategoryId
+            request.CategoryId,
+            request.Stock
         );
 
         var updatedProduct = productRepository.Update(product);

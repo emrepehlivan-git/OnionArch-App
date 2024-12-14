@@ -25,9 +25,9 @@ public sealed class GetAllProductsQueryHandlerTests : ProductTestBase
     {
         var products = new List<Product>
         {
-            Product.Create("Product 1", "Product 1", 100, Guid.NewGuid()),
-            Product.Create("Product 2", "Product 2", 200, Guid.NewGuid()),
-            Product.Create("Product 3", "Product 3", 300, Guid.NewGuid())
+            Product.Create("Product 1", "Product 1", 100, Guid.NewGuid(), 10),
+            Product.Create("Product 2", "Product 2", 200, Guid.NewGuid(), 20),
+            Product.Create("Product 3", "Product 3", 300, Guid.NewGuid(), 30)
         };
 
         ProductRepositoryMock.Setup(repo => repo.GetAllAsync(

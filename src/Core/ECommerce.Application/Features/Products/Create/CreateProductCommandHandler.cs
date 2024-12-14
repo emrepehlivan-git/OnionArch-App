@@ -20,7 +20,8 @@ public sealed class CreateProductCommandHandler(
             request.Name,
             request.Description,
             request.Price,
-            request.CategoryId
+            request.CategoryId,
+            request.Stock
         );
 
         var addedProduct = await productRepository.AddAsync(product, cancellationToken);

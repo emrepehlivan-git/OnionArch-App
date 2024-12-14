@@ -14,4 +14,5 @@ public static class ProductErrors
     public static Error ProductPriceMustBeGreaterThanZero => new("Product.PriceMustBeGreaterThanZero", $"Product price must be greater than {ProductConsts.MinPrice}");
     public static Error ProductStockQuantityCannotBeNegative => new("Product.StockQuantityCannotBeNegative", "Product stock quantity cannot be negative");
     public static Error CategoryNotFound => new("Product.CategoryNotFound", "Category not found");
+    public static Error ProductStockNotEnough(Guid productId, int stockQuantity) => new("Product.StockNotEnough", $"Product {productId} stock is not enough. Current stock: {stockQuantity}");
 }

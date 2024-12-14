@@ -12,7 +12,7 @@ public sealed class UpdateProductCommandHandlerTests : ProductTestBase
     {
         _validator = new UpdateProductCommandValidator(CategoryRepositoryMock.Object, ProductRepositoryMock.Object);
         SetupDefaultProduct();
-        _command = new UpdateProductCommand(DefaultProduct.Id, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId);
+        _command = new UpdateProductCommand(DefaultProduct.Id, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId, DefaultProduct.Stock);
     }
 
 
@@ -22,7 +22,7 @@ public sealed class UpdateProductCommandHandlerTests : ProductTestBase
         ProductRepositoryMock.Setup(x => x.GetByIdAsync(DefaultProduct.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(DefaultProduct);
 
-        DefaultProduct.Update(_command.Name, _command.Description, _command.Price, _command.CategoryId);
+        DefaultProduct.Update(_command.Name, _command.Description, _command.Price, _command.CategoryId, _command.Stock);
 
         ProductRepositoryMock.Setup(x => x.Update(DefaultProduct))
             .Returns(DefaultProduct);
@@ -38,7 +38,7 @@ public sealed class UpdateProductCommandHandlerTests : ProductTestBase
     [Fact]
     public async Task Handle_ShouldReturnFailureResult_WhenProductNotFound()
     {
-        var command = new UpdateProductCommand(Guid.Empty, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId);
+        var command = new UpdateProductCommand(Guid.Empty, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId, DefaultProduct.Stock);
         var validationResult = await _validator.ValidateAsync(command, It.IsAny<CancellationToken>());
 
         validationResult.IsValid.Should().BeFalse();
