@@ -17,7 +17,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
 
         services.AddApplicationServices()
-            .AddInfrastructureServices()
+            .AddInfrastructureServices(configuration)
             .AddEFCoreServices(configuration)
             .ConfigureSettings(configuration)
             .AddSerilog(new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger());

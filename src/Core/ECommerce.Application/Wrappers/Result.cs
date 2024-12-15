@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ECommerce.Application.Wrappers;
 
 /// <summary>
@@ -25,7 +27,8 @@ public class Result
     /// </summary>
     /// <param name="isSuccess">Indicates if the operation was successful.</param>
     /// <param name="error">The error information.</param>
-    protected Result(bool isSuccess, Error error)
+    [JsonConstructor]
+    public Result(bool isSuccess, Error error)
     {
         IsSuccess = isSuccess;
         Error = error;
@@ -37,7 +40,7 @@ public class Result
     /// <param name="isSuccess">Indicates if the operation was successful.</param>
     /// <param name="error">The error information.</param>
     /// <param name="validationErrors">The validation errors.</param>
-    protected Result(bool isSuccess, Error error, IEnumerable<Error>? validationErrors = null)
+    public Result(bool isSuccess, Error error, IEnumerable<Error>? validationErrors = null)
         : this(isSuccess, error)
     {
         ValidationErrors = validationErrors;
@@ -84,19 +87,8 @@ public class Result<T> : Result
     /// <param name="value">The value returned by the operation.</param>
     /// <param name="isSuccess">Indicates if the operation was successful.</param>
     /// <param name="error">The error information.</param>
-    private Result(T value, bool isSuccess, Error error) : base(isSuccess, error)
-    {
-        _value = value;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Result{T}"/> class with validation errors.
-    /// </summary>
-    /// <param name="value">The value returned by the operation.</param>
-    /// <param name="isSuccess">Indicates if the operation was successful.</param>
-    /// <param name="error">The error information.</param>
-    /// <param name="validationErrors">The validation errors.</param>
-    protected Result(T value, bool isSuccess, Error error, IEnumerable<Error>? validationErrors = null)
+    [JsonConstructor]
+    public Result(T value, bool isSuccess, Error error, IEnumerable<Error>? validationErrors = null)
         : base(isSuccess, error, validationErrors)
     {
         _value = value;

@@ -2,10 +2,8 @@ using System.Reflection;
 using ECommerce.Application.Behaviors.Cache;
 using ECommerce.Application.Behaviors.Transaction;
 using ECommerce.Application.Behaviors.Validation;
-using ECommerce.Application.Settings;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerce.Application;

@@ -1,4 +1,4 @@
-using ECommerce.Application.Extenions;
+using ECommerce.Application.Extensions;
 using ECommerce.Application.Features.Categories.Create;
 using ECommerce.Application.Features.Categories.Delete;
 using ECommerce.Application.Features.Categories.DeleteMany;
@@ -21,9 +21,9 @@ public sealed class CategoryController : BaseApiController
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetByIdQuery(id), cancellationToken);
+        var result = await Mediator.Send(new GetCategoryByIdQuery(id), cancellationToken);
         return result.Map(
-            success => Ok(success),
+            success => Ok(result),
             _ => NotFound(result)
         );
     }
@@ -33,7 +33,7 @@ public sealed class CategoryController : BaseApiController
     {
         var result = await Mediator.Send(command, cancellationToken);
         return result.Map(
-            success => Ok(success),
+            success => Ok(result),
             _ => BadRequest(result)
         );
     }
@@ -43,7 +43,7 @@ public sealed class CategoryController : BaseApiController
     {
         var result = await Mediator.Send(new UpdateCategoryCommand(id, command.Name), cancellationToken);
         return result.Map(
-            success => Ok(success),
+            success => Ok(result),
             _ => BadRequest(result)
         );
     }
@@ -53,7 +53,7 @@ public sealed class CategoryController : BaseApiController
     {
         var result = await Mediator.Send(new DeleteCategoryCommand(id), cancellationToken);
         return result.Map(
-            success => Ok(success),
+            success => Ok(result),
             _ => BadRequest(result)
         );
     }
@@ -62,6 +62,6 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> DeleteMany([FromBody] DeleteManyCategoryCommand command, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(command, cancellationToken);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 }

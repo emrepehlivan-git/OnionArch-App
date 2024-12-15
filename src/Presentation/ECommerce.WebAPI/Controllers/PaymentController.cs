@@ -1,4 +1,4 @@
-using ECommerce.Application.Extenions;
+using ECommerce.Application.Extensions;
 using ECommerce.Application.Features.Payments.Pay;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +10,6 @@ public sealed class PaymentController : BaseApiController
     public async Task<IActionResult> Pay([FromBody] PayCommand command, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(command, cancellationToken);
-        return result.Map(
-            success => Ok(success),
-            error => BadRequest(error)
-        );
+        return Ok(result);
     }
 }
