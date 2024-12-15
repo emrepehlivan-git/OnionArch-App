@@ -27,6 +27,10 @@ public sealed class PayCommandValidator : AbstractValidator<PayCommand>
             .NotEmpty()
             .WithMessage(PaymentErrors.ExpiryDateRequired.Message);
 
+        RuleFor(payment => payment.PaymentRequest.Cvv)
+            .NotEmpty()
+            .WithMessage(PaymentErrors.SecurityCodeRequired.Message);
+
         RuleFor(payment => payment.PaymentRequest.Amount)
             .Must(amount => amount > 0)
             .WithMessage(PaymentErrors.AmountMustBeGreaterThanZero.Message);
