@@ -15,10 +15,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.OrderNumber).IsRequired();
         builder.Property(o => o.OrderDate).IsRequired();
         builder.Property(o => o.TotalAmount)
-            .HasColumnType("decimal(18, 2)")
-            .IsRequired();
+            .HasColumnType("decimal(18, 2)");
         builder.Property(o => o.Status).IsRequired();
-        builder.Property(o => o.PaymentStatus).IsRequired();
         builder.Property(o => o.PaymentMethod).IsRequired();
 
         builder.HasMany(o => o.OrderItems).WithOne(oi => oi.Order).HasForeignKey(oi => oi.OrderId);

@@ -8,11 +8,11 @@ public class Order : BaseEntity
     public string OrderNumber { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
     public Address Address { get; private set; }
-    public decimal TotalAmount => OrderItems.Sum(item => item.Price * item.Quantity);
+    public decimal TotalAmount { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
-    public PaymentStatus PaymentStatus { get; private set; }
 
+    public virtual Payment Payment { get; private set; }
     public virtual ICollection<OrderItem> OrderItems { get; private set; } = [];
 
     private Order() { }
@@ -22,9 +22,9 @@ public class Order : BaseEntity
         OrderNumber = GenerateOrderNumber();
         OrderDate = DateTime.UtcNow;
         Status = OrderStatus.Pending;
-        PaymentStatus = PaymentStatus.Pending;
         PaymentMethod = paymentMethod;
         Address = address;
+        TotalAmount = OrderItems.Sum(item => item.Price * item.Quantity);
     }
 
     private string GenerateOrderNumber()
@@ -41,7 +41,7 @@ public class Order : BaseEntity
 
     public static Order Create(PaymentMethod paymentMethod, Address address)
     {
-        return new Order(paymentMethod, address);
+        return new(paymentMethod, address);
     }
 
     public void AddItems(IEnumerable<OrderItem> items)
@@ -57,8 +57,23 @@ public class Order : BaseEntity
         OrderItems.Remove(item);
     }
 
-    public void Cancel()
+    public void UpdateOrderStatus(OrderStatus status)
     {
-        Status = OrderStatus.Cancelled;
+        Status = status;
+    }
+
+    public void AddPayment(decimal amount)
+    {
+        Payment = Payment.Create(amount, Id);
+    }
+
+    public void UpdatePaymentStatus(PaymentStatus status)
+    {
+        Payment?.UpdatePaymentStatus(status);
+    }
+
+    public PaymentStatus GetPaymentStatus()
+    {
+        return Payment?.Status ?? PaymentStatus.Pending;
     }
 }

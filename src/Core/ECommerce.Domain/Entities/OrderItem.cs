@@ -1,16 +1,16 @@
 namespace ECommerce.Domain.Entities;
 
-public class OrderItem : BaseEntity
+public sealed class OrderItem : BaseEntity
 {
     public decimal Price { get; private set; }
     public int Quantity { get; private set; }
 
-    public virtual Order Order { get; private set; }
+    public Order Order { get; private set; }
     public Guid OrderId { get; private set; }
-    public virtual Product Product { get; private set; }
+    public Product Product { get; private set; }
     public Guid ProductId { get; private set; }
 
-    public decimal TotalPrice => Price * Quantity;
+    public decimal TotalPrice { get; private set; }
 
     private OrderItem() { }
 
@@ -20,6 +20,7 @@ public class OrderItem : BaseEntity
         Price = price;
         Quantity = quantity;
         OrderId = orderId;
+        TotalPrice = price * quantity;
     }
 
     public static OrderItem Create(Guid productId, Guid orderId, decimal price, int quantity)
