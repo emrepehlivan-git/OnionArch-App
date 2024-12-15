@@ -1,60 +1,65 @@
 using ECommerce.Application.Wrappers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Application.Extenions;
 
 public static class ResultExtension
 {
     /// <summary>
-    /// Ensures success and returns the value, otherwise throws an exception
+    /// Maps the result to either success or failure case
     /// </summary>
-    public static T EnsureSuccess<T>(this Result<T> result)
+    public static Result<TDestination> Map<TDestination>(
+        this Result<TDestination> result,
+        Func<TDestination> func)
     {
-        if (result.IsSuccess)
-            return result.Value!;
-
-        throw new InvalidOperationException($"Operation failed: {result.Error}");
+        return result.IsSuccess ? Result<TDestination>.Success(func()) : Result<TDestination>.Failure(result.Error);
     }
 
     /// <summary>
-    /// Maps a successful result to a new value
+    /// Maps the result to either success or failure case
     /// </summary>
-    public static Result<TOut> Map<TIn, TOut>(this Result<TIn> result, Func<TIn, TOut> mapper)
+    public static Result<TDestination> Map<TSource, TDestination>(
+        this Result<TSource> result,
+        Func<TSource, TDestination> func)
     {
-        if (!result.IsSuccess)
-            return Result<TOut>.Failure(result.Error);
-
-        return Result<TOut>.Success(mapper(result.Value!));
+        return result.IsSuccess ? Result<TDestination>.Success(func(result.Value!)) : Result<TDestination>.Failure(result.Error);
     }
 
     /// <summary>
-    /// Binds a result to another async operation
+    /// Maps a Result<T> to an IActionResult
     /// </summary>
-    public static async Task<Result<TOut>> Bind<TIn, TOut>(
-        this Result<TIn> result,
-        Func<TIn, Task<Result<TOut>>> func)
+    public static IActionResult Map<T>(
+        this Result<T> result,
+        Func<T, IActionResult> onSuccess,
+        Func<Error, IActionResult> onFailure)
     {
-        if (!result.IsSuccess)
-            return Result<TOut>.Failure(result.Error);
-
-        return await func(result.Value!);
+        return result.IsSuccess ? onSuccess(result.Value!) : onFailure(result.Error);
     }
 
     /// <summary>
-    /// Matches the result to either success or failure case
+    /// Maps a Result to another Result
     /// </summary>
-    public static TOut Match<TIn, TOut>(
-        this Result<TIn> result,
-        Func<TIn, TOut> success,
-        Func<Error, TOut> failure)
+    public static Result Map(
+        this Result result,
+        Func<Result> func)
     {
-        return result.IsSuccess ? success(result.Value!) : failure(result.Error);
+        return result.IsSuccess ? func() : Result.Failure(result.Error);
+    }
+
+    public static IActionResult Map(
+        this Result result,
+        Func<Result, IActionResult> func)
+    {
+        return result.IsSuccess ? func(result) : func(Result.Failure(result.Error));
     }
 
     /// <summary>
-    /// Matches the result to either success or failure case
+    /// Maps a Result<TSource> to another Result
     /// </summary>
-    public static TOut Match<TOut>(this Result result, Func<TOut> success, Func<Error, TOut> failure)
+    public static Result Map<TSource>(
+        this Result<TSource> result,
+        Func<TSource, Result> func)
     {
-        return result.IsSuccess ? success() : failure(result.Error);
+        return result.IsSuccess ? func(result.Value!) : Result.Failure(result.Error);
     }
 }

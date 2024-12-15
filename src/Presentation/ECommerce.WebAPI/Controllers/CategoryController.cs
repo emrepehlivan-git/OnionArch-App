@@ -2,7 +2,6 @@ using ECommerce.Application.Extenions;
 using ECommerce.Application.Features.Categories.Create;
 using ECommerce.Application.Features.Categories.Delete;
 using ECommerce.Application.Features.Categories.DeleteMany;
-using ECommerce.Application.Features.Categories.Dtos;
 using ECommerce.Application.Features.Categories.GetAll;
 using ECommerce.Application.Features.Categories.GetById;
 using ECommerce.Application.Features.Categories.Update;
@@ -23,8 +22,8 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetByIdQuery(id), cancellationToken);
-        return result.Match<CategoryDto, IActionResult>(
-            success => Ok(result),
+        return result.Map(
+            success => Ok(success),
             _ => NotFound(result)
         );
     }
@@ -33,8 +32,8 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(command, cancellationToken);
-        return result.Match<Guid, IActionResult>(
-            success => Ok(result),
+        return result.Map(
+            success => Ok(success),
             _ => BadRequest(result)
         );
     }
@@ -43,8 +42,8 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new UpdateCategoryCommand(id, command.Name), cancellationToken);
-        return result.Match<Guid, IActionResult>(
-            success => Ok(result),
+        return result.Map(
+            success => Ok(success),
             _ => BadRequest(result)
         );
     }
@@ -53,7 +52,7 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new DeleteCategoryCommand(id), cancellationToken);
-        return result.Match<Guid, IActionResult>(
+        return result.Map(
             success => Ok(success),
             _ => BadRequest(result)
         );
@@ -63,6 +62,6 @@ public sealed class CategoryController : BaseApiController
     public async Task<IActionResult> DeleteMany([FromBody] DeleteManyCategoryCommand command, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(command, cancellationToken);
-        return result.Match<IActionResult>(() => Ok(), _ => BadRequest(result));
+        return Ok(result);
     }
 }
