@@ -5,4 +5,4 @@ using MediatR;
 
 namespace ECommerce.Application.Features.Categories.DeleteMany;
 
-public record class DeleteManyCategoryCommand(List<Guid> Ids) : IRequest<Result>, IValidetableRequest, ITransactionalRequest;
+public record DeleteManyCategoryCommand(List<Guid> Ids) : IRequest<Result>, IValidetableRequest, ITransactionalRequest;
