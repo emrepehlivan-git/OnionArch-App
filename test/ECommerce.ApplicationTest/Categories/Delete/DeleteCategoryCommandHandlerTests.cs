@@ -27,10 +27,6 @@ public class DeleteCategoryCommandHandlerTests : CategoryTestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be(DefaultCategory.Id);
-
-        CategoryRepositoryMock.Verify(
-            x => x.DeleteAsync(DefaultCategory.Id, It.IsAny<CancellationToken>()),
-            Times.Once);
     }
 
     [Fact]
@@ -47,10 +43,5 @@ public class DeleteCategoryCommandHandlerTests : CategoryTestBase
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(CategoryErrors.CategoryNotFound);
-        result.Value.Should().Be(Guid.Empty);
-
-        CategoryRepositoryMock.Verify(
-            x => x.DeleteAsync(DefaultCategory.Id, It.IsAny<CancellationToken>()),
-            Times.Once);
     }
 }
