@@ -1,9 +1,10 @@
 using ECommerce.Domain.Enums;
+using ECommerce.Domain.Interfaces;
 using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Domain.Entities;
 
-public class Order : BaseEntity
+public class Order : BaseEntity, IAuditableEntity
 {
     public string OrderNumber { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
@@ -11,6 +12,11 @@ public class Order : BaseEntity
     public decimal TotalAmount { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
+
+    public Guid? CreatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public Guid? UpdatedBy { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual Payment Payment { get; private set; }
     public virtual ICollection<OrderItem> OrderItems { get; private set; } = [];

@@ -1,7 +1,5 @@
 using FluentValidation;
 using ECommerce.Application.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
-using ECommerce.Application.Wrappers;
 using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Application.Features.Orders.Create;
@@ -9,10 +7,11 @@ namespace ECommerce.Application.Features.Orders.Create;
 public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
     private readonly IProductRepository _productRepository;
-
-    public CreateOrderCommandValidator(IProductRepository productRepository)
+    private readonly IStockService _stockService;
+    public CreateOrderCommandValidator(IProductRepository productRepository, IStockService stockService)
     {
         _productRepository = productRepository;
+        _stockService = stockService;
 
         RuleFor(x => x)
             .MustAsync(ValidateProducts)
@@ -43,7 +42,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
     private async Task<bool> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
     {
         foreach (var orderItem in command.OrderItems)
-            if (!await _productRepository.IsProductInStock(orderItem.ProductId, orderItem.Quantity))
+            if (!await _stockService.IsStockAvailable(orderItem.ProductId, orderItem.Quantity))
                 return false;
 
         return true;

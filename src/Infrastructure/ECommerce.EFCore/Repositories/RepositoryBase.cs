@@ -56,7 +56,7 @@ where TEntity : class, IEntity
 
     public bool Delete(TEntity entity)
     {
-        _context.Entry(entity).State = EntityState.Deleted;
+        _context.Remove(entity);
         return true;
     }
 
