@@ -1,8 +1,10 @@
 using ECommerce.Application;
+using ECommerce.Application.Interfaces.Services;
 using ECommerce.Application.Settings;
 using ECommerce.EFCore;
 using ECommerce.EFCore.Contexts;
 using ECommerce.Infrastructure;
+using ECommerce.WebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -21,6 +23,9 @@ public static class DependencyInjection
             .AddEFCoreServices(configuration)
             .ConfigureSettings(configuration)
             .AddSerilog(new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger());
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
