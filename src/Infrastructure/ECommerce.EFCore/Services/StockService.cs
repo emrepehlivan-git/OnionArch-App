@@ -15,24 +15,25 @@ public sealed class StockService(
 
     public async Task ReserveStock(Guid productId, int quantity)
     {
-        var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
-        if (product is null || product.Stock < quantity)
+        var productStock = context.ProductStocks.FirstOrDefault(ps => ps.ProductId == productId && ps.Stock >= quantity);
+        if (productStock is not null)
+        {
+            context.ProductStocks.Update(productStock);
+            await context.SaveChangesAsync();
+        }
+        else
         {
             logger.LogError("Stock not available for product {ProductId}", productId);
-            return;
         }
-
-        product.DecreaseStock(quantity);
-        await context.SaveChangesAsync();
     }
 
     public async Task ReleaseStock(Guid productId, int quantity)
     {
-        var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
-        if (product is null)
-            return;
-
-        product.IncreaseStock(quantity);
-        await context.SaveChangesAsync();
+        var productStock = context.ProductStocks.FirstOrDefault(ps => ps.ProductId == productId);
+        if (productStock is not null)
+        {
+            context.ProductStocks.Update(productStock);
+            await context.SaveChangesAsync();
+        }
     }
 }

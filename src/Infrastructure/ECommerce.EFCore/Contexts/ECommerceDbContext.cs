@@ -11,6 +11,7 @@ public class ECommerceDbContext(DbContextOptions<ECommerceDbContext> options) : 
     public virtual DbSet<Order> Orders { get; set; } = null!;
     public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
     public virtual DbSet<Payment> Payments { get; set; } = null!;
+    public virtual DbSet<ProductStock> ProductStocks { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
