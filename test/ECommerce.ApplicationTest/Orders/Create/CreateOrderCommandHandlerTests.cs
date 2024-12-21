@@ -19,9 +19,9 @@ public class CreateOrderCommandHandlerTests : OrderTestBase
 
     public CreateOrderCommandHandlerTests()
     {
-        _handler = new CreateOrderCommandHandler(OrderRepositoryMock.Object, OrderItemRepositoryMock.Object, ProductRepositoryMock.Object);
+        _handler = new CreateOrderCommandHandler(OrderRepositoryMock.Object, OrderItemRepositoryMock.Object, MediatorMock.Object);
         _command = new CreateOrderCommand(customerId, _orderItems, _paymentMethod, _address);
-        _validator = new CreateOrderCommandValidator(ProductRepositoryMock.Object);
+        _validator = new CreateOrderCommandValidator(ProductRepositoryMock.Object, StockServiceMock.Object);
     }
 
     [Fact]

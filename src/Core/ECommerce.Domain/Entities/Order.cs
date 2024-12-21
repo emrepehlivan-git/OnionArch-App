@@ -1,3 +1,4 @@
+using ECommerce.Domain.DomainEvents.Orders;
 using ECommerce.Domain.Enums;
 using ECommerce.Domain.Interfaces;
 using ECommerce.Domain.ValueObjects;

@@ -1,8 +1,6 @@
-using ECommerce.Application.Extenions;
 using ECommerce.Application.Extensions;
 using ECommerce.Application.Features.Products.Create;
 using ECommerce.Application.Features.Products.Delete;
-using ECommerce.Application.Features.Products.Dtos;
 using ECommerce.Application.Features.Products.GetAll;
 using ECommerce.Application.Features.Products.GetById;
 using ECommerce.Application.Features.Products.Update;

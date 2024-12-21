@@ -1,6 +1,6 @@
-using ECommerce.Application.Features.Products;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
+using ECommerce.Domain.DomainEvents.Orders;
 using ECommerce.Domain.Entities;
 using MediatR;
 
@@ -9,38 +9,34 @@ namespace ECommerce.Application.Features.Orders.Create;
 public sealed class CreateOrderCommandHandler(
     IOrderRepository orderRepository,
     IOrderItemRepository orderItemRepository,
-    IProductRepository productRepository,
-    IStockService stockService
+    IMediator mediator
 ) : IRequestHandler<CreateOrderCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var products = productRepository
-            .GetByCondition(product => request.OrderItems.Select(x => x.ProductId).Contains(product.Id))
-            .ToList();
-
         var order = Order.Create(request.PaymentMethod, request.Address);
 
         List<OrderItem> orderItems = [];
         foreach (var item in request.OrderItems)
         {
-            var product = products.First(p => p.Id == item.ProductId);
             var orderItem = OrderItem.Create(
                 order.Id,
-                product.Id,
-                product.Price,
+                item.ProductId,
+                item.Price,
                 item.Quantity
             );
             orderItems.Add(orderItem);
-
-            if (!await stockService.ReserveStock(product.Id, item.Quantity))
-                return Result<Guid>.Failure(ProductErrors.ProductStockNotEnough(product.Id, product.Stock));
+            await mediator.Publish(new StockReservedEvent(
+                item.ProductId,
+                item.Quantity
+            ));
         }
 
         order.AddItems(orderItems);
-        productRepository.UpdateRange(products);
-        await orderRepository.AddAsync(order, cancellationToken);
-        await orderItemRepository.AddRangeAsync(orderItems, cancellationToken);
+        await Task.WhenAll(
+            orderRepository.AddAsync(order, cancellationToken),
+            orderItemRepository.AddRangeAsync(orderItems, cancellationToken)
+        );
         return Result<Guid>.Success(order.Id);
     }
 }

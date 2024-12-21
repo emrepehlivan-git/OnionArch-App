@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using ECommerce.Application.Extenions;
+using ECommerce.Application.Extensions;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using ECommerce.Domain.Interfaces;

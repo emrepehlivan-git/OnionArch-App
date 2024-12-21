@@ -30,7 +30,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         });
 
         builder.HasMany(o => o.OrderItems)
-            .WithOne(oi => oi.Order)
+            .WithOne()
             .HasForeignKey(oi => oi.OrderId);
 
         builder.HasIndex(o => o.OrderNumber).IsUnique();

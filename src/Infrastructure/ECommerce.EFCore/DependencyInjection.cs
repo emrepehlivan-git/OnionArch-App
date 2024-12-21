@@ -3,6 +3,7 @@ using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.EFCore.Contexts;
 using ECommerce.EFCore.Data;
 using ECommerce.EFCore.Repositories;
+using ECommerce.EFCore.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IStockService, StockService>();
         services.AddRepositories();
 
         return services;

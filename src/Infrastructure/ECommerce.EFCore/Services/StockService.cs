@@ -1,28 +1,29 @@
 using ECommerce.EFCore.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-public sealed class StockService : IStockService
+namespace ECommerce.EFCore.Services;
+
+public sealed class StockService(
+    ECommerceDbContext context,
+    ILogger<StockService> logger) : IStockService
 {
-    private readonly ECommerceDbContext context;
-
-    public StockService(ECommerceDbContext context)
-    {
-        this.context = context;
-    }
-
     public async Task<bool> IsStockAvailable(Guid productId, int quantity)
     {
         return await context.Products.AnyAsync(p => p.Id == productId && p.Stock >= quantity);
     }
 
-    public async Task<bool> ReserveStock(Guid productId, int quantity)
+    public async Task ReserveStock(Guid productId, int quantity)
     {
         var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
         if (product is null || product.Stock < quantity)
-            return false;
+        {
+            logger.LogError("Stock not available for product {ProductId}", productId);
+            return;
+        }
 
         product.DecreaseStock(quantity);
-        return true;
+        await context.SaveChangesAsync();
     }
 
     public async Task ReleaseStock(Guid productId, int quantity)
@@ -32,5 +33,6 @@ public sealed class StockService : IStockService
             return;
 
         product.IncreaseStock(quantity);
+        await context.SaveChangesAsync();
     }
 }
