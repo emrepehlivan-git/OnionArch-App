@@ -16,4 +16,14 @@ public sealed class ProductStock : BaseEntity
     {
         return new(productId, stock);
     }
+
+    public void DecreaseStock(int quantity)
+    {
+        Stock -= quantity;
+    }
+
+    public void IncreaseStock(int quantity)
+    {
+        Stock += quantity;
+    }
 }

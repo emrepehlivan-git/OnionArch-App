@@ -5,7 +5,7 @@ using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Domain.Entities;
 
-public class Order : BaseEntity, IAuditableEntity
+public sealed class Order : BaseEntity, IAuditableEntity
 {
     public string OrderNumber { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
@@ -19,8 +19,8 @@ public class Order : BaseEntity, IAuditableEntity
     public Guid? UpdatedBy { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual Payment Payment { get; private set; }
-    public virtual ICollection<OrderItem> OrderItems { get; private set; } = [];
+    public Payment Payment { get; private set; }
+    public ICollection<OrderItem> OrderItems { get; private set; } = [];
 
     private Order() { }
 
@@ -32,6 +32,7 @@ public class Order : BaseEntity, IAuditableEntity
         PaymentMethod = paymentMethod;
         Address = address;
         TotalAmount = OrderItems.Sum(item => item.Price * item.Quantity);
+        AddDomainEvent(new StockReservedEvent(Id, OrderItems.Sum(item => item.Quantity)));
     }
 
     private string GenerateOrderNumber()
