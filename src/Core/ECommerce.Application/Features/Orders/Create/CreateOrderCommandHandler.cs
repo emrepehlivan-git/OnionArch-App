@@ -8,8 +8,7 @@ namespace ECommerce.Application.Features.Orders.Create;
 
 public sealed class CreateOrderCommandHandler(
     IOrderRepository orderRepository,
-    IOrderItemRepository orderItemRepository,
-    IMediator mediator
+    IOrderItemRepository orderItemRepository
 ) : IRequestHandler<CreateOrderCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -26,10 +25,6 @@ public sealed class CreateOrderCommandHandler(
                 item.Quantity
             );
             orderItems.Add(orderItem);
-            await mediator.Publish(new StockReservedEvent(
-                item.ProductId,
-                item.Quantity
-            ));
         }
 
         order.AddItems(orderItems);

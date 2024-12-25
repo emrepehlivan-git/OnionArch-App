@@ -10,7 +10,6 @@ public sealed class Order : BaseEntity, IAuditableEntity
     public string OrderNumber { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
     public Address Address { get; private set; }
-    public decimal TotalAmount { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
 
@@ -31,8 +30,6 @@ public sealed class Order : BaseEntity, IAuditableEntity
         Status = OrderStatus.Pending;
         PaymentMethod = paymentMethod;
         Address = address;
-        TotalAmount = OrderItems.Sum(item => item.Price * item.Quantity);
-        AddDomainEvent(new StockReservedEvent(Id, OrderItems.Sum(item => item.Quantity)));
     }
 
     private string GenerateOrderNumber()

@@ -1,21 +1,16 @@
 using FluentValidation;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Domain.ValueObjects;
+using ECommerce.Application.Features.Orders.Validators;
 
 namespace ECommerce.Application.Features.Orders.Create;
 
-public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+public sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
-    private readonly IProductRepository _productRepository;
     private readonly IStockService _stockService;
-    public CreateOrderCommandValidator(IProductRepository productRepository, IStockService stockService)
+    public CreateOrderCommandValidator(IStockService stockService)
     {
-        _productRepository = productRepository;
         _stockService = stockService;
-
-        RuleFor(x => x)
-            .MustAsync(ValidateProducts)
-            .WithMessage(x => OrderErrors.OneOrMoreOrderItemsNotFound(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
 
         RuleFor(x => x)
             .MustAsync(ValidateProductStock)
@@ -26,17 +21,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
             .WithMessage(OrderErrors.InvalidPaymentMethod.Message);
 
         RuleFor(x => x.Address)
-            .Must(IsValidAddress)
-            .WithMessage(OrderErrors.InvalidAddress.Message);
-    }
-
-    private async Task<bool> ValidateProducts(CreateOrderCommand command, CancellationToken token)
-    {
-        var productIds = command.OrderItems.Select(x => x.ProductId).ToArray();
-
-        return await Task.FromResult(_productRepository
-            .GetByCondition(x => productIds.Contains(x.Id))
-            .Count() == productIds.Length);
+            .SetValidator(new AddressValidator());
     }
 
     private async Task<bool> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
@@ -46,14 +31,5 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
                 return false;
 
         return true;
-    }
-
-    private static bool IsValidAddress(Address address)
-    {
-        return !string.IsNullOrEmpty(address.Country) &&
-               !string.IsNullOrEmpty(address.Street) &&
-               !string.IsNullOrEmpty(address.City) &&
-               !string.IsNullOrEmpty(address.State) &&
-               !string.IsNullOrEmpty(address.ZipCode);
     }
 }

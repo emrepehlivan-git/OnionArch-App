@@ -1,3 +1,5 @@
+using ECommerce.Domain.DomainEvents.Orders;
+
 namespace ECommerce.Domain.Entities;
 
 public sealed class OrderItem : BaseEntity
@@ -19,6 +21,7 @@ public sealed class OrderItem : BaseEntity
         Quantity = quantity;
         OrderId = orderId;
         TotalPrice = price * quantity;
+        AddDomainEvent(new StockReservedEvent(productId, quantity));
     }
 
     public static OrderItem Create(Guid productId, Guid orderId, decimal price, int quantity)
