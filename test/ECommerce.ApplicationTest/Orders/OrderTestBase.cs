@@ -9,7 +9,6 @@ namespace ECommerce.ApplicationTest.Orders;
 public abstract class OrderTestBase
 {
     protected readonly Mock<IOrderRepository> OrderRepositoryMock;
-    protected readonly Mock<IProductRepository> ProductRepositoryMock;
     protected readonly Mock<IOrderItemRepository> OrderItemRepositoryMock;
     protected readonly Mock<IStockService> StockServiceMock;
     protected readonly Mock<IMediator> MediatorMock;
@@ -18,7 +17,6 @@ public abstract class OrderTestBase
     {
         OrderRepositoryMock = new();
         OrderItemRepositoryMock = new();
-        ProductRepositoryMock = new();
         StockServiceMock = new();
         MediatorMock = new();
         DefaultOrder = Order.Create(PaymentMethod.CreditCard, new Address("Street", "City", "State", "Country", "ZipCode"));

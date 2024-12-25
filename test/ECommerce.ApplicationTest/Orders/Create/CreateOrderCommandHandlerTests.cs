@@ -19,9 +19,9 @@ public class CreateOrderCommandHandlerTests : OrderTestBase
 
     public CreateOrderCommandHandlerTests()
     {
-        _handler = new CreateOrderCommandHandler(OrderRepositoryMock.Object, OrderItemRepositoryMock.Object, MediatorMock.Object);
+        _handler = new CreateOrderCommandHandler(OrderRepositoryMock.Object, OrderItemRepositoryMock.Object);
         _command = new CreateOrderCommand(customerId, _orderItems, _paymentMethod, _address);
-        _validator = new CreateOrderCommandValidator(ProductRepositoryMock.Object, StockServiceMock.Object);
+        _validator = new CreateOrderCommandValidator(StockServiceMock.Object);
     }
 
     [Fact]
@@ -31,7 +31,6 @@ public class CreateOrderCommandHandlerTests : OrderTestBase
         OrderRepositoryMock.Setup(x => x.AddAsync(order, CancellationToken.None))
         .ReturnsAsync(order);
         OrderItemRepositoryMock.Setup(x => x.AddRangeAsync(It.IsAny<List<OrderItem>>(), CancellationToken.None)).ReturnsAsync(new List<OrderItem>());
-        ProductRepositoryMock.Setup(x => x.UpdateRange(It.IsAny<List<Product>>())).Returns(new List<Product>());
         var result = await _handler.Handle(_command, CancellationToken.None);
         result.IsSuccess.Should().BeTrue();
     }
@@ -52,15 +51,6 @@ public class CreateOrderCommandHandlerTests : OrderTestBase
         var result = await _validator.ValidateAsync(_command, CancellationToken.None);
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(x => x.ErrorMessage == OrderErrors.OneOrMoreOrderItemsNotInStock(new[] { _command.OrderItems[0].ProductId }).Message);
-    }
-
-    [Fact]
-    public async Task Handle_ShouldReturnFailureResult_WhenCommandIsOrderItemsAreNotFound()
-    {
-        _command = _command with { OrderItems = [new OrderItemDto(Guid.NewGuid(), Guid.NewGuid(), 1, 1)] };
-        var result = await _validator.ValidateAsync(_command, CancellationToken.None);
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(x => x.ErrorMessage == OrderErrors.OneOrMoreOrderItemsNotFound(new[] { _command.OrderItems[0].ProductId }).Message);
     }
 
     [Fact]
