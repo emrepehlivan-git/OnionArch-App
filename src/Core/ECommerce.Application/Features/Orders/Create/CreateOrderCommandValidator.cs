@@ -1,6 +1,4 @@
 using FluentValidation;
-using ECommerce.Application.Interfaces.Repositories;
-using ECommerce.Domain.ValueObjects;
 using ECommerce.Application.Features.Orders.Validators;
 
 namespace ECommerce.Application.Features.Orders.Create;
@@ -13,8 +11,8 @@ public sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderC
         _stockService = stockService;
 
         RuleFor(x => x)
-            .MustAsync(ValidateProductStock)
-            .WithMessage(x => OrderErrors.OneOrMoreOrderItemsNotInStock(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
+            .MustAsync(async (x, token) => !(await ValidateProductStock(x, token)).Any())
+            .WithMessage(x => OrderErrors.StockNotAvailable(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
 
         RuleFor(x => x.PaymentMethod)
             .IsInEnum()
@@ -24,12 +22,14 @@ public sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderC
             .SetValidator(new AddressValidator());
     }
 
-    private async Task<bool> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
+    private async Task<List<Guid>> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
     {
+        List<Guid> productIds = [];
         foreach (var orderItem in command.OrderItems)
-            if (!await _stockService.IsStockAvailable(orderItem.ProductId, orderItem.Quantity))
-                return false;
-
-        return true;
+        {
+            if (!await _stockService.IsStockAvailable(orderItem.ProductId, orderItem.Quantity, token))
+                productIds.Add(orderItem.ProductId);
+        }
+        return productIds;
     }
 }

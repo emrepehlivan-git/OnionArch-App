@@ -12,7 +12,6 @@ public sealed class Order : BaseEntity, IAuditableEntity
     public Address Address { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
     public OrderStatus Status { get; private set; }
-
     public Guid? CreatedBy { get; set; }
     public DateTime? CreatedAt { get; set; }
     public Guid? UpdatedBy { get; set; }

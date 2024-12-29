@@ -14,8 +14,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(o => o.OrderNumber).IsRequired();
         builder.Property(o => o.OrderDate).IsRequired();
-        builder.Property(o => o.TotalAmount)
-            .HasColumnType("decimal(18, 2)");
         builder.Property(o => o.Status).IsRequired();
         builder.Property(o => o.PaymentMethod).IsRequired();
 

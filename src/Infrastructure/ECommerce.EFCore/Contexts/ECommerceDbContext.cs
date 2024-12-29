@@ -11,12 +11,10 @@ namespace ECommerce.EFCore.Contexts;
 
 public class ECommerceDbContext : DbContext
 {
-    private readonly IServiceProvider _serviceProvider;
 
-    public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options, IServiceProvider serviceProvider)
+    public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options)
         : base(options)
     {
-        _serviceProvider = serviceProvider;
     }
 
     public virtual DbSet<Category> Categories { get; set; } = null!;
@@ -31,22 +29,10 @@ public class ECommerceDbContext : DbContext
         base.OnConfiguring(optionsBuilder);
 
         optionsBuilder.UseSnakeCaseNamingConvention();
-        optionsBuilder.AddInterceptors(GetSaveChangesInterceptors());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
-
-    private IInterceptor[] GetSaveChangesInterceptors()
-    {
-        var currentUserService = _serviceProvider.GetRequiredService<ICurrentUserService>();
-        var publisher = _serviceProvider.GetRequiredService<IPublisher>();
-        return
-        [
-            new AuditableEntitySaveChangesInterceptor(currentUserService),
-            new DomainEventSaveChangesInterceptor(publisher)
-        ];
     }
 }

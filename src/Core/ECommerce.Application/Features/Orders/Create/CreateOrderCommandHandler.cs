@@ -19,8 +19,8 @@ public sealed class CreateOrderCommandHandler(
         foreach (var item in request.OrderItems)
         {
             var orderItem = OrderItem.Create(
-                order.Id,
                 item.ProductId,
+                order.Id,
                 item.Price,
                 item.Quantity
             );

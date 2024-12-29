@@ -14,7 +14,7 @@ public sealed class OrderItem : BaseEntity
 
     private OrderItem() { }
 
-    private OrderItem(Guid productId, Guid orderId, decimal price, int quantity)
+    private OrderItem(Guid orderId, Guid productId, decimal price, int quantity)
     {
         ProductId = productId;
         Price = price;
