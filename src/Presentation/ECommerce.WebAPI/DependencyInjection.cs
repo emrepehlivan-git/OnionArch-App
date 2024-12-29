@@ -3,6 +3,7 @@ using ECommerce.Application.Interfaces.Services;
 using ECommerce.Application.Settings;
 using ECommerce.EFCore;
 using ECommerce.EFCore.Contexts;
+using ECommerce.EFCore.Seed;
 using ECommerce.Infrastructure;
 using ECommerce.WebAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,13 @@ public static class DependencyInjection
         var dbContext = scope.ServiceProvider.GetRequiredService<ECommerceDbContext>();
         if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
             await dbContext.Database.MigrateAsync();
+    }
+
+    public static async Task SeedDatabase(this WebApplication app)
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ECommerceDbContext>();
+        await new SeedDatabase(dbContext).SeedAsync(CancellationToken.None);
     }
 
     private static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
