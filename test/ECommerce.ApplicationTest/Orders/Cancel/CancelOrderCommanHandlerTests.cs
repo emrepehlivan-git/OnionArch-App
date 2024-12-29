@@ -29,7 +29,7 @@ public class CancelOrderCommanHandlerTests : OrderTestBase
         var address = new Address("Street", "City", "State", "Country", "ZipCode");
         var order = Order.Create(PaymentMethod.CreditCard, address);
         OrderRepositoryMock.Setup(x => x.GetByIdAsync(_orderId, CancellationToken.None)).ReturnsAsync(order);
-        order.UpdateOrderStatus(OrderStatus.Cancelled);
+        order.Cancel();
         OrderRepositoryMock.Setup(x => x.Update(order));
 
         // Act

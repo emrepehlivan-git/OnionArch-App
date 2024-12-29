@@ -61,11 +61,6 @@ public sealed class Order : BaseEntity, IAuditableEntity
         OrderItems.Remove(item);
     }
 
-    public void UpdateOrderStatus(OrderStatus status)
-    {
-        Status = status;
-    }
-
     public void Cancel()
     {
         Status = OrderStatus.Cancelled;
