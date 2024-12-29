@@ -66,10 +66,11 @@ public sealed class Order : BaseEntity, IAuditableEntity
         Status = status;
     }
 
-    public void Cancel(Guid productId, int quantity)
+    public void Cancel()
     {
         Status = OrderStatus.Cancelled;
-        AddDomainEvent(new StockNotReservedEvent(productId, quantity));
+        foreach (var item in OrderItems)
+            AddDomainEvent(new StockNotReservedEvent(item.ProductId, item.Quantity));
     }
 
     public void AddPayment(decimal amount)

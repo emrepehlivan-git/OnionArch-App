@@ -10,7 +10,7 @@ public sealed class CancelOrderCommandHandler(IOrderRepository orderRepository) 
     public async Task<Result> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetByIdAsync(request.OrderId, cancellationToken);
-        order!.UpdateOrderStatus(OrderStatus.Cancelled);
+        order!.Cancel();
         orderRepository.Update(order);
         return Result.Success();
     }
