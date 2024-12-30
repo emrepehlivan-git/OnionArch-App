@@ -10,6 +10,7 @@ services:
       - "4000:8080"
     environment:
       - ConnectionStrings__DefaultConnection=Host=ecommerce.db;Database=ecommerce;Username=postgres;Password=postgres
+      - ConnectionStrings__RedisConnection=ecommerce.redis:6379
     depends_on:
       - ecommerce.db
       - ecommerce.seq
@@ -49,7 +50,7 @@ services:
       - ecommerce
 
   ecommerce.smtp4dev:
-    image: smtp4dev/smtp4dev
+    image: rnwood/smtp4dev
     container_name: c_ecommerce_smtp4dev
     ports:
       - "25:25"

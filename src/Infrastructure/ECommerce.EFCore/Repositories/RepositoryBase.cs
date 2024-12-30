@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using ECommerce.Application.Extenions;
+using ECommerce.Application.Extensions;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
 using ECommerce.Domain.Interfaces;
@@ -56,7 +56,7 @@ where TEntity : class, IEntity
 
     public bool Delete(TEntity entity)
     {
-        _context.Entry(entity).State = EntityState.Deleted;
+        _context.Remove(entity);
         return true;
     }
 
@@ -87,9 +87,7 @@ where TEntity : class, IEntity
     }
 
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
-    {
-        return await Table.CountAsync(expression, cancellationToken);
-    }
+    => await Table.CountAsync(expression, cancellationToken);
 
     public IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities)
     {

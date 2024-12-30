@@ -8,10 +8,8 @@ public sealed class DeleteProductCommandHandlerTests : ProductTestBase
     [Fact]
     public async Task Handle_ShouldReturnSuccessResult_WhenProductIsDeleted()
     {
-        var productId = Guid.Empty;
-        SetupDefaultProduct();
-        var command = new DeleteProductCommand(productId);
-        ProductRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
+        var command = new DeleteProductCommand(DefaultProduct.Id);
+        ProductRepositoryMock.Setup(x => x.GetByIdAsync(DefaultProduct.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(DefaultProduct);
 
         ProductRepositoryMock.Setup(x => x.DeleteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

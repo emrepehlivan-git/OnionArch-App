@@ -1,7 +1,7 @@
 using ECommerce.Application.Wrappers;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce.Application.Extenions;
+namespace ECommerce.Application.Extensions;
 
 public static class QueryableExtension
 {

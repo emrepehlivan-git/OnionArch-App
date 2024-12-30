@@ -10,6 +10,8 @@ WORKDIR /src
 COPY ["src/Presentation/ECommerce.WebAPI/ECommerce.WebAPI.csproj", "src/Presentation/ECommerce.WebAPI/"]
 COPY ["src/Core/ECommerce.Application/ECommerce.Application.csproj", "src/Core/ECommerce.Application/"]
 COPY ["src/Core/ECommerce.Domain/ECommerce.Domain.csproj", "src/Core/ECommerce.Domain/"]
+COPY ["src/Infrastructure/ECommerce.EFCore/ECommerce.EFCore.csproj", "src/Infrastructure/ECommerce.EFCore/"]
+COPY ["src/Infrastructure/ECommerce.Infrastructure/ECommerce.Infrastructure.csproj", "src/Infrastructure/ECommerce.Infrastructure/"]
 RUN dotnet restore "src/Presentation/ECommerce.WebAPI/ECommerce.WebAPI.csproj"
 COPY . .
 WORKDIR "/src/src/Presentation/ECommerce.WebAPI"

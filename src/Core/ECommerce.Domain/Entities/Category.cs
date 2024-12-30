@@ -1,10 +1,16 @@
+using ECommerce.Domain.Interfaces;
+
 namespace ECommerce.Domain.Entities;
 
-public class Category : BaseEntity
+public sealed class Category : BaseEntity, IAuditableEntity
 {
     public string Name { get; private set; }
 
-    public virtual ICollection<Product> Products { get; private set; } = [];
+    public ICollection<Product> Products { get; private set; } = [];
+    public Guid? CreatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public Guid? UpdatedBy { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     private Category()
     {

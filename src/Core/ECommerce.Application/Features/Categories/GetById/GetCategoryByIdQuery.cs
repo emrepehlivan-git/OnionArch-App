@@ -5,7 +5,7 @@ using MediatR;
 
 namespace ECommerce.Application.Features.Categories.GetById;
 
-public record GetByIdQuery(Guid Id) : IRequest<Result<CategoryDto>>, ICacheableRequest
+public record GetCategoryByIdQuery(Guid Id) : IRequest<Result<CategoryDto>>, ICacheableRequest
 {
     public string CacheKey => $"Category-{Id}";
 

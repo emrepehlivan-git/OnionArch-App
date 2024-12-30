@@ -1,5 +1,6 @@
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Wrappers;
+using ECommerce.Domain.Enums;
 using MediatR;
 
 namespace ECommerce.Application.Features.Orders.Cancel;

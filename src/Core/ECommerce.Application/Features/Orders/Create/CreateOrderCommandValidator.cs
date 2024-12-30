@@ -1,60 +1,35 @@
 using FluentValidation;
-using ECommerce.Application.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
-using ECommerce.Application.Wrappers;
-using ECommerce.Domain.ValueObjects;
+using ECommerce.Application.Features.Orders.Validators;
 
 namespace ECommerce.Application.Features.Orders.Create;
 
-public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+public sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
-    private readonly IProductRepository _productRepository;
-
-    public CreateOrderCommandValidator(IProductRepository productRepository)
+    private readonly IStockService _stockService;
+    public CreateOrderCommandValidator(IStockService stockService)
     {
-        _productRepository = productRepository;
+        _stockService = stockService;
 
         RuleFor(x => x)
-            .MustAsync(ValidateProducts)
-            .WithMessage(x => OrderErrors.OneOrMoreOrderItemsNotFound(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
-
-        RuleFor(x => x)
-            .MustAsync(ValidateProductStock)
-            .WithMessage(x => OrderErrors.OneOrMoreOrderItemsNotInStock(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
+            .MustAsync(async (x, token) => !(await ValidateProductStock(x, token)).Any())
+            .WithMessage(x => OrderErrors.StockNotAvailable(x.OrderItems.Select(y => y.ProductId).ToArray()).Message);
 
         RuleFor(x => x.PaymentMethod)
             .IsInEnum()
             .WithMessage(OrderErrors.InvalidPaymentMethod.Message);
 
         RuleFor(x => x.Address)
-            .Must(IsValidAddress)
-            .WithMessage(OrderErrors.InvalidAddress.Message);
+            .SetValidator(new AddressValidator());
     }
 
-    private async Task<bool> ValidateProducts(CreateOrderCommand command, CancellationToken token)
+    private async Task<List<Guid>> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
     {
-        var productIds = command.OrderItems.Select(x => x.ProductId).ToArray();
-
-        return await Task.FromResult(_productRepository
-            .GetByCondition(x => productIds.Contains(x.Id))
-            .Count() == productIds.Length);
-    }
-
-    private async Task<bool> ValidateProductStock(CreateOrderCommand command, CancellationToken token)
-    {
+        List<Guid> productIds = [];
         foreach (var orderItem in command.OrderItems)
-            if (!await _productRepository.IsProductInStock(orderItem.ProductId, orderItem.Quantity))
-                return false;
-
-        return true;
-    }
-
-    private static bool IsValidAddress(Address address)
-    {
-        return !string.IsNullOrEmpty(address.Country) &&
-               !string.IsNullOrEmpty(address.Street) &&
-               !string.IsNullOrEmpty(address.City) &&
-               !string.IsNullOrEmpty(address.State) &&
-               !string.IsNullOrEmpty(address.ZipCode);
+        {
+            if (!await _stockService.IsStockAvailable(orderItem.ProductId, orderItem.Quantity, token))
+                productIds.Add(orderItem.ProductId);
+        }
+        return productIds;
     }
 }

@@ -1,13 +1,20 @@
+using ECommerce.Domain.Interfaces;
+
 namespace ECommerce.Domain.Entities;
 
-public class Product : BaseEntity
+public sealed class Product : BaseEntity, IAuditableEntity
 {
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
     public Guid CategoryId { get; private set; }
-    public virtual Category Category { get; private set; }
+    public Category Category { get; private set; }
+
+    public Guid? CreatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public Guid? UpdatedBy { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     private Product() { }
 

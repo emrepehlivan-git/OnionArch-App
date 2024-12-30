@@ -11,9 +11,7 @@ public sealed class ProductGetByIdQueryHandler(IProductRepository productReposit
     public async Task<Result<ProductDto>> Handle(ProductGetByIdQuery request, CancellationToken cancellationToken)
     {
         var product = await productRepository.GetByIdAsync(request.Id, cancellationToken);
-        if (product is null)
-            return Result<ProductDto>.Failure(ProductErrors.ProductNotFound);
 
-        return Result<ProductDto>.Success(product.Adapt<ProductDto>());
+        return product is null ? Result<ProductDto>.Failure(ProductErrors.ProductNotFound) : Result<ProductDto>.Success(product.Adapt<ProductDto>());
     }
 }

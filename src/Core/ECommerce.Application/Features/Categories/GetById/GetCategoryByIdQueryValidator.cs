@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace ECommerce.Application.Features.Categories.GetById;
 
-public sealed class GetByIdQueryValidator : AbstractValidator<GetByIdQuery>
+public sealed class GetCategoryByIdQueryValidator : AbstractValidator<GetCategoryByIdQuery>
 {
     private readonly ICategoryRepository _categoryRepository;
 
-    public GetByIdQueryValidator(ICategoryRepository categoryRepository)
+    public GetCategoryByIdQueryValidator(ICategoryRepository categoryRepository)
     {
         _categoryRepository = categoryRepository;
 

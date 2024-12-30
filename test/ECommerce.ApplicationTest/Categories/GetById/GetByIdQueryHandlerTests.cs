@@ -6,12 +6,10 @@ namespace ECommerce.ApplicationTest.Categories.GetById;
 
 public class GetByIdQueryHandlerTests : CategoryTestBase
 {
-    private readonly GetByIdQueryHandler _handler;
-    private readonly GetByIdQuery _query;
+    private readonly GetCategoryByIdQueryHandler _handler;
     public GetByIdQueryHandlerTests()
     {
-        _handler = new GetByIdQueryHandler(CategoryRepositoryMock.Object);
-        _query = new GetByIdQuery(DefaultCategory.Id);
+        _handler = new GetCategoryByIdQueryHandler(CategoryRepositoryMock.Object);
     }
 
     [Fact]
@@ -22,10 +20,9 @@ public class GetByIdQueryHandlerTests : CategoryTestBase
             .ReturnsAsync(DefaultCategory);
 
         // Act
-        var result = await _handler.Handle(_query, CancellationToken.None);
+        var result = await _handler.Handle(new GetCategoryByIdQuery(DefaultCategory.Id), CancellationToken.None);
 
         // Assert
-        result.Value.Should().NotBeNull();
         result.Value.Should().BeOfType<CategoryDto>();
         result.IsSuccess.Should().BeTrue();
         result.Value!.Id.Should().Be(DefaultCategory.Id);
@@ -40,7 +37,7 @@ public class GetByIdQueryHandlerTests : CategoryTestBase
             .ReturnsAsync((Domain.Entities.Category)null!);
 
         // Act
-        var result = await _handler.Handle(_query, CancellationToken.None);
+        var result = await _handler.Handle(new GetCategoryByIdQuery(Guid.NewGuid()), CancellationToken.None);
 
         // Assert
         result.Value.Should().BeNull();

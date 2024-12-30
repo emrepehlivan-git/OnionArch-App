@@ -16,8 +16,8 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.Property(oi => oi.Price).IsRequired();
         builder.Property(oi => oi.TotalPrice).IsRequired();
 
-        builder.HasOne(oi => oi.Order).WithMany(o => o.OrderItems).HasForeignKey(oi => oi.OrderId);
-        builder.HasOne(oi => oi.Product).WithMany().HasForeignKey(oi => oi.ProductId);
+        builder.HasOne<Order>().WithMany(o => o.OrderItems).HasForeignKey(oi => oi.OrderId);
+        builder.HasOne<Product>().WithMany().HasForeignKey(oi => oi.ProductId);
 
         builder.HasIndex(oi => new { oi.OrderId, oi.ProductId }).IsUnique();
     }

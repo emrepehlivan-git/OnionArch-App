@@ -1,3 +1,3 @@
 namespace ECommerce.Application.Dtos.Payment;
 
-public record PaymentRequest(string CardNumber, string ExpiryDate, string Cvv, decimal Amount);
+public record PaymentRequest(Guid OrderId, string CardNumber, string CardHolderName, string ExpiryDate, string Cvv, decimal Amount);

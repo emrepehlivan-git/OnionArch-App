@@ -80,3 +80,4 @@ coverage.opencover.xml
 
 # JetBrains Rider
 .idea/
+/src/Presentation/ECommerce.WebAPI/Logs

@@ -6,12 +6,11 @@ namespace ECommerce.ApplicationTest.Products.Update;
 public sealed class UpdateProductCommandHandlerTests : ProductTestBase
 {
     private readonly UpdateProductCommandValidator _validator;
-    private UpdateProductCommand _command = null!;
+    private UpdateProductCommand _command;
 
     public UpdateProductCommandHandlerTests()
     {
         _validator = new UpdateProductCommandValidator(CategoryRepositoryMock.Object, ProductRepositoryMock.Object);
-        SetupDefaultProduct();
         _command = new UpdateProductCommand(DefaultProduct.Id, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId, DefaultProduct.Stock);
     }
 
@@ -38,8 +37,8 @@ public sealed class UpdateProductCommandHandlerTests : ProductTestBase
     [Fact]
     public async Task Handle_ShouldReturnFailureResult_WhenProductNotFound()
     {
-        var command = new UpdateProductCommand(Guid.Empty, DefaultProduct.Name, DefaultProduct.Description, DefaultProduct.Price, DefaultProduct.CategoryId, DefaultProduct.Stock);
-        var validationResult = await _validator.ValidateAsync(command, It.IsAny<CancellationToken>());
+        _command = _command with { Id = Guid.Empty };
+        var validationResult = await _validator.ValidateAsync(_command, It.IsAny<CancellationToken>());
 
         validationResult.IsValid.Should().BeFalse();
         validationResult.Errors.Should().Contain(x => x.ErrorMessage == ProductErrors.ProductNotFound.Message);

@@ -2,15 +2,37 @@ using System.Text;
 using System.Text.Json;
 using ECommerce.Application.Interfaces.Services;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 namespace ECommerce.Infrastructure.Services;
 
-public sealed class CacheSerivce(IDistributedCache distributedCache) : ICacheService
+public sealed class RedisCacheService(IDistributedCache distributedCache, ILogger<RedisCacheService> logger) : ICacheService
 {
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
+    private readonly ILogger<RedisCacheService> _logger = logger;
+
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
         var cachedValue = await distributedCache.GetAsync(key, cancellationToken);
-        return cachedValue is null ? default! : JsonSerializer.Deserialize<T>(cachedValue);
+        if (cachedValue is null)
+        {
+            return default!;
+        }
+
+        try
+        {
+            var result = JsonSerializer.Deserialize<T>(cachedValue, _jsonSerializerOptions);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deserializing cache value for key: {Key}", key);
+            return default!;
+        }
     }
 
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)

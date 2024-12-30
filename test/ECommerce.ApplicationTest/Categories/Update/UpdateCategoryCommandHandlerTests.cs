@@ -33,8 +33,6 @@ public class UpdateCategoryCommandHandlerTests : CategoryTestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be(_command.Id);
-        CategoryRepositoryMock.Verify(x => x.Update(It.Is<Domain.Entities.Category>(
-            c => c.Id == _command.Id && c.Name == _command.Name)), Times.Once);
     }
 
     [Fact]

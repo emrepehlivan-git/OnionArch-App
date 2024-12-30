@@ -26,15 +26,14 @@ public sealed class EmailService(IOptions<MailSettings> mailSettings) : IEmailSe
 
     public async Task SendEmailAsync(IEnumerable<EmailRequest> requests, CancellationToken cancellationToken = default)
     {
-        var smtpClient = GetSmtpClient();
         foreach (var request in requests)
         {
             await SendEmailAsync(request, cancellationToken);
         }
     }
 
-    private SmtpClient GetSmtpClient()
+    private SmtpClient GetSmtpClient() => new(_mailSettings.Host, _mailSettings.Port)
     {
-        return new(_mailSettings.Host, _mailSettings.Port);
-    }
+        EnableSsl = _mailSettings.EnableSsl,
+    };
 }
